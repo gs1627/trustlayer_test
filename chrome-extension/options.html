@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TRUSTLAYER Guardian — Settings</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg-card: #161a23;
+      --border: #2a3045;
+      --accent: #3b7fff;
+      --green: #22c55e;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      padding: 24px;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    h1 { font-size: 20px; margin-bottom: 6px; color: #3b7fff; }
+    .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 24px; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .card h2 { font-size: 14px; margin-bottom: 14px; color: var(--text-dim); letter-spacing: 0.05em; text-transform: uppercase; }
+
+    label { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 4px; }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      background: #0d0f14;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+      padding: 7px 10px;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    input:focus { border-color: var(--accent); }
+
+    .hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: -8px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .btn-row { display: flex; gap: 10px; align-items: center; margin-top: 4px; }
+    button {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .btn-save { background: var(--accent); color: #fff; }
+    .btn-save:hover { background: #2563eb; }
+    .btn-clear { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.35); }
+    .btn-clear:hover { background: rgba(239,68,68,0.25); }
+
+    #save-msg {
+      font-size: 12px;
+      display: none;
+    }
+    #save-msg.ok  { color: var(--green); }
+    #save-msg.err { color: var(--red); }
+
+    .warning-box {
+      background: rgba(234,179,8,0.08);
+      border: 1px solid rgba(234,179,8,0.3);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #ca8a04;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .warning-box strong { color: #eab308; }
+
+    .info-box {
+      background: rgba(59,127,255,0.07);
+      border: 1px solid rgba(59,127,255,0.2);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    ul { margin: 4px 0 0 16px; }
+    li { margin-bottom: 2px; }
+    code { font-family: 'Courier New', monospace; font-size: 11.5px; background: rgba(255,255,255,0.07); padding: 1px 4px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>🛡️ TRUSTLAYER Guardian — Settings</h1>
+  <p class="subtitle">Configure your backend connection and authentication. Settings are stored locally in Chrome.</p>
+
+  <div class="warning-box">
+    <strong>⚠️ Token storage notice:</strong>
+    Your JWT or backend token is stored in <code>chrome.storage.local</code> on this device only.
+    It is not synced to other devices, not visible to other extensions, and not sent anywhere except
+    your configured backend URL. Clear it here when no longer needed.
+  </div>
+
+  <div class="card">
+    <h2>Backend Connection</h2>
+
+    <label for="backend-url">Backend URL</label>
+    <input type="text" id="backend-url" placeholder="http://localhost:8000" autocomplete="off" spellcheck="false" />
+    <p class="hint">
+      Use <code>http://localhost:8000</code> for local development. Use <code>https://your-backend.example.com</code>
+      for a deployed instance. The WebSocket will automatically use <code>ws://</code> or <code>wss://</code>.
+    </p>
+
+    <label for="token">Bearer Token (JWT or shared token)</label>
+    <input type="password" id="token" placeholder="Paste your JWT or backend access token here" autocomplete="off" spellcheck="false" />
+    <p class="hint">
+      Leave blank when running locally without authentication (dev mode).
+      Never paste <code>DETECTIF_API_KEY</code> or <code>JWT_SECRET_KEY</code> here — only paste the
+      short-lived <strong>user JWT</strong> issued by your backend's <code>/api/v1/auth/token</code> endpoint,
+      or the <code>BACKEND_ACCESS_TOKEN</code> value from your <code>.env</code> file for local dev.
+    </p>
+  </div>
+
+  <div class="btn-row">
+    <button id="btn-save" class="btn-save">Save Settings</button>
+    <button id="btn-clear-token" class="btn-clear">Clear Token</button>
+    <span id="save-msg"></span>
+  </div>
+
+  <br />
+  <div class="info-box">
+    <strong>Authentication modes supported:</strong>
+    <ul>
+      <li><strong>Dev open (no auth):</strong> No token required when backend runs locally without <code>BACKEND_ACCESS_TOKEN</code> or <code>JWT_SECRET_KEY</code>.</li>
+      <li><strong>JWT:</strong> Paste the JWT returned by <code>POST /api/v1/auth/token</code>.</li>
+      <li><strong>Shared token:</strong> Paste the value of <code>BACKEND_ACCESS_TOKEN</code> from your backend <code>.env</code>.</li>
+    </ul>
+    <br />
+    The token is sent in the WebSocket's first JSON frame as <code>{"type":"auth","token":"…"}</code> — never in URL query parameters.
+  </div>
+
+  <script src="options.js" type="module"></script>
+</body>
+</html>

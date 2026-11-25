@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRUSTLAYER Guardian</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-brand">
+        <div class="logo-shield">🛡️</div>
+        <div class="header-text">
+          <span class="brand-name">TRUSTLAYER</span>
+          <span class="brand-sub">Guardian</span>
+        </div>
+      </div>
+      <button id="btn-settings" class="icon-btn" title="Settings" aria-label="Open settings">⚙️</button>
+    </header>
+
+    <!-- Backend status bar -->
+    <div id="status-bar" class="status-bar status-unknown">
+      <span id="status-dot" class="status-dot"></span>
+      <span id="status-text">Checking backend…</span>
+    </div>
+
+    <!-- Current tab info -->
+    <div class="section tab-info">
+      <div class="label">Monitored tab</div>
+      <div id="tab-title" class="tab-title">—</div>
+    </div>
+
+    <!-- Call session -->
+    <div class="section" id="session-section" style="display:none;">
+      <div class="label">Session ID</div>
+      <div id="call-id" class="call-id-value mono">—</div>
+    </div>
+
+    <!-- Analysis result panel -->
+    <div id="result-panel" class="result-panel" style="display:none;">
+      <div class="result-header">
+        <span class="result-icon" id="result-icon">🔎</span>
+        <span class="result-title" id="result-title">Analysis</span>
+      </div>
+      <div class="result-grid">
+        <div class="result-row">
+          <span class="rlabel">Provider</span>
+          <span class="rvalue" id="r-provider">—</span>
+        </div>
+        <div class="result-row">
+          <span class="rlabel">Check</span>
+          <span class="rvalue" id="r-check-type">—</span>
+        </div>
+        <div class="result-row">
+          <span class="rlabel">Status</span>
+          <span class="rvalue" id="r-status">—</span>
+        </div>
+        <div class="result-row">
+          <span class="rlabel">Verdict</span>
+          <span class="rvalue verdict-value" id="r-verdict">—</span>
+        </div>
+        <div class="result-row">
+          <span class="rlabel">Result type</span>
+          <span class="rvalue" id="r-final">—</span>
+        </div>
+        <div class="result-row" id="r-score-row" style="display:none;">
+          <span class="rlabel">Score</span>
+          <span class="rvalue mono" id="r-score">—</span>
+        </div>
+      </div>
+
+      <!-- Disclaimer note -->
+      <div class="disclaimer">
+        ℹ️ This result is provided by DetectifAI and reflects preliminary evidence only.
+        A single result cannot confirm or deny a voice is cloned.
+      </div>
+    </div>
+
+    <!-- Error panel -->
+    <div id="error-panel" class="error-panel" style="display:none;">
+      <span class="error-icon">⚠️</span>
+      <span id="error-message" class="error-message">An error occurred.</span>
+    </div>
+
+    <!-- Privacy notice (shown before first start) -->
+    <div id="privacy-notice" class="privacy-notice">
+      <strong>What will be captured:</strong>
+      <ul>
+        <li>Audio from the <em>current browser tab only</em>.</li>
+        <li>Your microphone is <strong>not</strong> captured.</li>
+        <li>Audio is streamed live to your backend and not saved locally.</li>
+        <li>Capture stops immediately when you click Stop or close this popup.</li>
+      </ul>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="actions">
+      <button id="btn-start" class="btn btn-start" disabled>
+        <span class="btn-icon">▶</span> Start Monitoring
+      </button>
+      <button id="btn-stop" class="btn btn-stop" style="display:none;">
+        <span class="btn-icon">⏹</span> Stop Monitoring
+      </button>
+    </div>
+
+    <!-- Monitoring indicator -->
+    <div id="monitoring-indicator" class="monitoring-indicator" style="display:none;">
+      <span class="pulse-dot"></span>
+      <span>Monitoring active — sending audio to backend</span>
+    </div>
+
+  </div>
+  <script src="popup.js" type="module"></script>
+</body>
+</html>
